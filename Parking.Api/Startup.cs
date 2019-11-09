@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Parking.Api.Commands.Handlers;
 using Parking.Api.Models;
 using Parking.Api.Queries.Handlers;
 using Parking.Api.Services;
-using Swashbuckle.AspNetCore.Swagger;
 
 namespace Parking.Api
 {
@@ -30,7 +30,7 @@ namespace Parking.Api
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "Parking API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Parking API", Version = "v1" });
             });
 
             services.AddDbContextPool<DbContext, ParkingContext>(options =>
