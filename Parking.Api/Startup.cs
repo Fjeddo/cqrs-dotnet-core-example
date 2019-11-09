@@ -4,12 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Parking.Api.Commands.Handlers;
 using Parking.Api.Models;
 using Parking.Api.Queries.Handlers;
 using Parking.Api.Services;
 using Swashbuckle.AspNetCore.Swagger;
-using AuthenticationService = Parking.Api.Services.AuthenticationService;
 
 namespace Parking.Api
 {
@@ -24,7 +24,9 @@ namespace Parking.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services
+                .AddMvc(options => options.EnableEndpointRouting = false)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.AddSwaggerGen(c =>
             {
@@ -46,7 +48,7 @@ namespace Parking.Api
             services.AddScoped<CommandStoreService>();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
