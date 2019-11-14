@@ -2,7 +2,13 @@
 {
     public class CreateParkingCommand
     {
-        public string ParkingName { get; set; }
-        public int Capacity { get; set; }
+        public string ParkingName { get; }
+        public int Capacity { get; }
+
+        public CreateParkingCommand(string parkingName, int capacity)
+        {
+            ParkingName = parkingName;
+            Capacity = capacity;
+        }
     }
 }

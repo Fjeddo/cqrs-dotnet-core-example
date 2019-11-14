@@ -2,6 +2,11 @@
 {
     public class CloseParkingCommand
     {
-        public string ParkingName { get; set; }
+        public string ParkingName { get; }
+
+        public CloseParkingCommand(string parkingName)
+        {
+            ParkingName = parkingName;
+        }
     }
 }

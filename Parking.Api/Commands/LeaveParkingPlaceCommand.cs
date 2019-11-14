@@ -2,7 +2,13 @@
 {
     public class LeaveParkingPlaceCommand
     {
-        public string ParkingName { get; set; }
-        public int PlaceNumber { get; set; }
+        public string ParkingName { get; }
+        public int PlaceNumber { get; }
+
+        public LeaveParkingPlaceCommand(string parkingName, int placeNumber)
+        {
+            ParkingName = parkingName;
+            PlaceNumber = placeNumber;
+        }
     }
 }

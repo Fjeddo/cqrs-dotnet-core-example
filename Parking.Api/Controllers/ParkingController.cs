@@ -66,7 +66,7 @@ namespace Parking.Api.Controllers
         [HttpPost("{parkingName}/open")]
         public void OpenParking(string parkingName)
         {
-            var command = new OpenParkingCommand { ParkingName = parkingName };
+            var command = new OpenParkingCommand(parkingName);
 
             _commandHandler.Handle(command);
         }
@@ -74,7 +74,7 @@ namespace Parking.Api.Controllers
         [HttpPost("{parkingName}/close")]
         public void CloseParking(string parkingName)
         {
-            var command = new CloseParkingCommand { ParkingName = parkingName };
+            var command = new CloseParkingCommand(parkingName);
 
             _commandHandler.Handle(command);
         }
@@ -82,11 +82,7 @@ namespace Parking.Api.Controllers
         [HttpPost("{parkingName}/{placeNumber}/take")]
         public void TakeParkingPlace(string parkingName, int placeNumber)
         {
-            var command = new TakeParkingPlaceCommand
-            {
-                ParkingName = parkingName,
-                PlaceNumber = placeNumber
-            };
+            var command = new TakeParkingPlaceCommand(parkingName, placeNumber);
 
             _commandHandler.Handle(command);
         }
@@ -94,12 +90,8 @@ namespace Parking.Api.Controllers
         [HttpPost("{parkingName}/{placeNumber}/leave")]
         public void LeaveParkingPlace(string parkingName, int placeNumber)
         {
-            var command = new LeaveParkingPlaceCommand
-            {
-                ParkingName = parkingName,
-                PlaceNumber = placeNumber
-            };
-
+            var command = new LeaveParkingPlaceCommand(parkingName, placeNumber);
+            
             _commandHandler.Handle(command);
         }
     }
