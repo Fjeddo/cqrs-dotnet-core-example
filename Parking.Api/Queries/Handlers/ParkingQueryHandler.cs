@@ -29,10 +29,7 @@ namespace Parking.Api.Queries.Handlers
                     Name = p.Name,
                     IsOpened = p.IsOpened,
                     MaximumPlaces = p.Places.Count,
-                    AvailablePlaces =
-                        p.IsOpened
-                            ? p.Places.Where(pp => pp.IsFree).Count()
-                            : 0
+                    AvailablePlaces = p.IsOpened ? p.Places.Count(pp => pp.IsFree) : 0
                 };
             });
         }
@@ -53,10 +50,7 @@ namespace Parking.Api.Queries.Handlers
                 Name = parking.Name,
                 IsOpened = parking.IsOpened,
                 MaximumPlaces = parking.Places.Count,
-                AvailablePlaces = 
-                    parking.IsOpened 
-                        ? parking.Places.Where(pp => pp.IsFree).Count()
-                        : 0
+                AvailablePlaces = parking.IsOpened ? parking.Places.Count(pp => pp.IsFree) : 0
             };
         }
 
@@ -79,9 +73,7 @@ namespace Parking.Api.Queries.Handlers
 
         public int Handle(GetTotalAvailablePlacesQuery _)
         {
-            return _dbContext.Set<ParkingPlace>()
-                .Where(p => p.Parking.IsOpened && p.IsFree)
-                .Count();
+            return _dbContext.Set<ParkingPlace>().Count(p => p.Parking.IsOpened && p.IsFree);
         }
     }
 }

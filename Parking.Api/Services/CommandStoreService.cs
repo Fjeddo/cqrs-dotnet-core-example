@@ -10,10 +10,7 @@ namespace Parking.Api.Services
         private readonly DbContext _dbContext;
         private readonly AuthenticationService _authenticationService;
 
-        public CommandStoreService(
-            DbContext dbContext,
-            AuthenticationService authenticationService
-        )
+        public CommandStoreService(DbContext dbContext, AuthenticationService authenticationService)
         {
             _dbContext = dbContext;
             _authenticationService = authenticationService;
@@ -27,9 +24,10 @@ namespace Parking.Api.Services
                     Type = command.GetType().Name,
                     Data = JsonConvert.SerializeObject(command),
                     CreatedAt = DateTime.Now,
-                    UserId = _authenticationService.GetUserId()
+                    UserId = _authenticationService.UserId
                 }
             );
+
             _dbContext.SaveChanges();
         }
     }

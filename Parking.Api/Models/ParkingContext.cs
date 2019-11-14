@@ -4,8 +4,7 @@ namespace Parking.Api.Models
 {
     public class ParkingContext : DbContext
     {
-        public ParkingContext(DbContextOptions options)
-            : base(options)
+        public ParkingContext(DbContextOptions options) : base(options)
         { }
 
         public DbSet<Parking> Parking { get; set; }

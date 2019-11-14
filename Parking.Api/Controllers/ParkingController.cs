@@ -17,10 +17,7 @@ namespace Parking.Api.Controllers
         private readonly ParkingCommandHandler _commandHandler;
         private readonly ParkingQueryHandler _queryHandler;
 
-        public ParkingController(
-            ParkingCommandHandler commandHandler,
-            ParkingQueryHandler queryHandler
-        )
+        public ParkingController(ParkingCommandHandler commandHandler, ParkingQueryHandler queryHandler)
         {
             _commandHandler = commandHandler;
             _queryHandler = queryHandler;
@@ -30,6 +27,7 @@ namespace Parking.Api.Controllers
         public int GetTotalAvailablePlaces()
         {
             var query = new GetTotalAvailablePlacesQuery();
+
             return _queryHandler.Handle(query);
         }
 
@@ -37,6 +35,7 @@ namespace Parking.Api.Controllers
         public ParkingPlaceInfo GetRandomAvailablePlace()
         {
             var query = new GetRandomAvailablePlace();
+
             return _queryHandler.Handle(query);
         }
 
@@ -44,6 +43,7 @@ namespace Parking.Api.Controllers
         public IEnumerable<ParkingInfo> GetAllParkingInfos()
         {
             var query = new GetAllParkingInfoQuery();
+
             return _queryHandler.Handle(query);
         }
 
@@ -51,6 +51,7 @@ namespace Parking.Api.Controllers
         public ParkingInfo GetParkingInfo(string parkingName)
         {
             var query = new GetParkingInfoQuery { ParkingName = parkingName };
+
             return _queryHandler.Handle(query);
         }
 
@@ -58,6 +59,7 @@ namespace Parking.Api.Controllers
         public void CreateParking([FromBody] CreateParkingRequest request)
         {
             var command = request.ConvertTo<CreateParkingCommand>();
+
             _commandHandler.Handle(command);
         }
 
@@ -65,6 +67,7 @@ namespace Parking.Api.Controllers
         public void OpenParking(string parkingName)
         {
             var command = new OpenParkingCommand { ParkingName = parkingName };
+
             _commandHandler.Handle(command);
         }
 
@@ -72,6 +75,7 @@ namespace Parking.Api.Controllers
         public void CloseParking(string parkingName)
         {
             var command = new CloseParkingCommand { ParkingName = parkingName };
+
             _commandHandler.Handle(command);
         }
 
@@ -83,6 +87,7 @@ namespace Parking.Api.Controllers
                 ParkingName = parkingName,
                 PlaceNumber = placeNumber
             };
+
             _commandHandler.Handle(command);
         }
 
@@ -94,6 +99,7 @@ namespace Parking.Api.Controllers
                 ParkingName = parkingName,
                 PlaceNumber = placeNumber
             };
+
             _commandHandler.Handle(command);
         }
     }

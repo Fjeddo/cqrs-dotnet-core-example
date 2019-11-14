@@ -25,21 +25,21 @@ namespace Parking.Api.Commands.Handlers
 
         public void Handle(CloseParkingCommand command)
         {
-            var parking = _dbContext.Set<Models.Parking>()
-                .FirstOrDefault(p => p.Name == command.ParkingName);
+            var parking = _dbContext.Set<Models.Parking>().FirstOrDefault(p => p.Name == command.ParkingName);
 
             if (parking == null)
             {
                 throw new Exception($"Cannot find parking '{command.ParkingName}'.");
             }
+
             if (!parking.IsOpened)
             {
                 throw new Exception($"Parking '{command.ParkingName}' is already closed.");
             }
 
             parking.IsOpened = false;
-            _dbContext.SaveChanges();
 
+            _dbContext.SaveChanges();
             _commandStoreService.Push(command);
         }
 
@@ -54,8 +54,7 @@ namespace Parking.Api.Commands.Handlers
                         Number = n,
                         IsFree = true
                     };
-                })
-                .ToList();
+                }).ToList();
 
             var parking = new Models.Parking
             {
@@ -66,31 +65,30 @@ namespace Parking.Api.Commands.Handlers
 
             _dbContext.Add(parking);
             _dbContext.SaveChanges();
-
             _commandStoreService.Push(command);
         }
 
         public void Handle(LeaveParkingPlaceCommand command)
         {
-            var parking = _dbContext.Set<Models.Parking>()
-                .FirstOrDefault(p => p.Name == command.ParkingName);
+            var parking = _dbContext.Set<Models.Parking>().FirstOrDefault(p => p.Name == command.ParkingName);
 
             if (parking == null)
             {
                 throw new Exception($"Cannot find parking '{command.ParkingName}'.");
             }
+
             if (!parking.IsOpened)
             {
                 throw new Exception($"The parking '{command.ParkingName}' is closed.");
             }
 
-            var parkingPlace = _dbContext.Set<ParkingPlace>()
-                .FirstOrDefault(p => p.ParkingName == command.ParkingName && p.Number == command.PlaceNumber);
+            var parkingPlace = _dbContext.Set<ParkingPlace>().FirstOrDefault(p => p.ParkingName == command.ParkingName && p.Number == command.PlaceNumber);
 
             if (parkingPlace == null)
             {
                 throw new Exception($"Cannot find place #{command.PlaceNumber} in the parking '{command.ParkingName}'.");
             }
+
             if (parkingPlace.IsFree)
             {
                 throw new Exception($"Parking place #{command.PlaceNumber} is still free.");
@@ -98,61 +96,61 @@ namespace Parking.Api.Commands.Handlers
 
             parkingPlace.IsFree = true;
             parkingPlace.UserId = null;
-            _dbContext.SaveChanges();
 
+            _dbContext.SaveChanges();
             _commandStoreService.Push(command);
         }
 
         public void Handle(OpenParkingCommand command)
         {
-            var parking = _dbContext.Set<Models.Parking>()
-                .FirstOrDefault(p => p.Name == command.ParkingName);
+            var parking = _dbContext.Set<Models.Parking>().FirstOrDefault(p => p.Name == command.ParkingName);
 
             if (parking == null)
             {
                 throw new Exception($"Cannot find parking '{command.ParkingName}'.");
             }
+
             if (parking.IsOpened)
             {
                 throw new Exception($"Parking '{command.ParkingName}' is already opened.");
             }
 
             parking.IsOpened = true;
-            _dbContext.SaveChanges();
 
+            _dbContext.SaveChanges();
             _commandStoreService.Push(command);
         }
 
         public void Handle(TakeParkingPlaceCommand command)
         {
-            var parking = _dbContext.Set<Models.Parking>()
-                .FirstOrDefault(p => p.Name == command.ParkingName);
+            var parking = _dbContext.Set<Models.Parking>().FirstOrDefault(p => p.Name == command.ParkingName);
 
             if (parking == null)
             {
                 throw new Exception($"Cannot find parking '{command.ParkingName}'.");
             }
+
             if (!parking.IsOpened)
             {
                 throw new Exception($"The parking '{command.ParkingName}' is closed.");
             }
 
-            var parkingPlace = _dbContext.Set<ParkingPlace>()
-                .FirstOrDefault(p => p.ParkingName == command.ParkingName && p.Number == command.PlaceNumber);
+            var parkingPlace = _dbContext.Set<ParkingPlace>().FirstOrDefault(p => p.ParkingName == command.ParkingName && p.Number == command.PlaceNumber);
 
             if (parkingPlace == null)
             {
                 throw new Exception($"Cannot find place #{command.PlaceNumber} in the parking '{command.ParkingName}'.");
             }
+
             if (!parkingPlace.IsFree)
             {
                 throw new Exception($"Parking place #{command.PlaceNumber} is already taken.");
             }
 
             parkingPlace.IsFree = false;
-            parkingPlace.UserId = _authenticationService.GetUserId();
-            _dbContext.SaveChanges();
+            parkingPlace.UserId = _authenticationService.UserId;
 
+            _dbContext.SaveChanges();
             _commandStoreService.Push(command);
         }
     }

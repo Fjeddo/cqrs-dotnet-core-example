@@ -35,9 +35,7 @@ namespace Parking.Api
 
             services.AddDbContextPool<DbContext, ParkingContext>(options =>
             {
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")
-                );
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
             services.AddScoped<AuthenticationService>();
