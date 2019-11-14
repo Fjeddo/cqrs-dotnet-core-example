@@ -2,6 +2,11 @@
 {
     public class GetParkingInfoQuery
     {
-        public string ParkingName { get; set; }
+        public string ParkingName { get; }
+
+        public GetParkingInfoQuery(string parkingName)
+        {
+            ParkingName = parkingName;
+        }
     }
 }

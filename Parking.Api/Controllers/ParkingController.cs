@@ -50,7 +50,7 @@ namespace Parking.Api.Controllers
         [HttpGet("{parkingName}")]
         public ParkingInfo GetParkingInfo(string parkingName)
         {
-            var query = new GetParkingInfoQuery { ParkingName = parkingName };
+            var query = new GetParkingInfoQuery(parkingName);
 
             return _queryHandler.Handle(query);
         }
