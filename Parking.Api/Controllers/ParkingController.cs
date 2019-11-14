@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
-using Converto;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Parking.Api.Commands;
 using Parking.Api.Commands.Handlers;
 using Parking.Api.Queries;
 using Parking.Api.Queries.Handlers;
 using Parking.Api.Requests;
 using Parking.Api.Responses;
+using Parking.Api.Services;
 
 namespace Parking.Api.Controllers
 {
@@ -14,12 +15,16 @@ namespace Parking.Api.Controllers
     [ApiController]
     public class ParkingController : ControllerBase
     {
-        private readonly ParkingCommandHandler _commandHandler;
+        private readonly DbContext _dbContext;
+        private readonly AuthenticationService _authenticationService;
+        private readonly CommandStoreService _commandStoreService;
         private readonly ParkingQueryHandler _queryHandler;
 
-        public ParkingController(ParkingCommandHandler commandHandler, ParkingQueryHandler queryHandler)
+        public ParkingController(DbContext dbContext, AuthenticationService authenticationService, CommandStoreService commandStoreService, ParkingQueryHandler queryHandler)
         {
-            _commandHandler = commandHandler;
+            _dbContext = dbContext;
+            _authenticationService = authenticationService;
+            _commandStoreService = commandStoreService;
             _queryHandler = queryHandler;
         }
 
@@ -58,9 +63,10 @@ namespace Parking.Api.Controllers
         [HttpPost]
         public void CreateParking([FromBody] CreateParkingRequest request)
         {
-            var command = request.ConvertTo<CreateParkingCommand>();
+            var command = new CreateParkingCommand(request.ParkingName, request.Capacity);
 
-            _commandHandler.Handle(command);
+            var commandHandler = new CreateParkingCommandHandler(_dbContext, _commandStoreService);
+            commandHandler.Handle(command);
         }
 
         [HttpPost("{parkingName}/open")]
@@ -68,15 +74,17 @@ namespace Parking.Api.Controllers
         {
             var command = new OpenParkingCommand(parkingName);
 
-            _commandHandler.Handle(command);
+            var commandHandler = new OpenParkingCommandHandler( _dbContext,_commandStoreService);
+            commandHandler.Handle(command);
         }
 
         [HttpPost("{parkingName}/close")]
         public void CloseParking(string parkingName)
         {
             var command = new CloseParkingCommand(parkingName);
-
-            _commandHandler.Handle(command);
+            
+            var commandHandler = new CloseParkingCommandHandler(_dbContext, _commandStoreService);
+            commandHandler.Handle(command);
         }
 
         [HttpPost("{parkingName}/{placeNumber}/take")]
@@ -84,7 +92,8 @@ namespace Parking.Api.Controllers
         {
             var command = new TakeParkingPlaceCommand(parkingName, placeNumber);
 
-            _commandHandler.Handle(command);
+            var commandHandler = new TakeParkingPlaceCommandHandler(_dbContext, _authenticationService, _commandStoreService);
+            commandHandler.Handle(command);
         }
 
         [HttpPost("{parkingName}/{placeNumber}/leave")]
@@ -92,7 +101,8 @@ namespace Parking.Api.Controllers
         {
             var command = new LeaveParkingPlaceCommand(parkingName, placeNumber);
             
-            _commandHandler.Handle(command);
+            var commandHandler = new LeaveParkingPlaceCommandHandler(_dbContext, _commandStoreService);
+            commandHandler.Handle(command);
         }
     }
 }

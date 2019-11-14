@@ -1,6 +1,6 @@
 ﻿namespace Parking.Api.Commands
 {
-    public class CreateParkingCommand
+    public class CreateParkingCommand : ICommand
     {
         public string ParkingName { get; }
         public int Capacity { get; }

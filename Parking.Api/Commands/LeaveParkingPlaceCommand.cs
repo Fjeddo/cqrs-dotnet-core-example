@@ -1,6 +1,6 @@
 ﻿namespace Parking.Api.Commands
 {
-    public class LeaveParkingPlaceCommand
+    public class LeaveParkingPlaceCommand : ICommand
     {
         public string ParkingName { get; }
         public int PlaceNumber { get; }
