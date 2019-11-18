@@ -1,4 +1,5 @@
-### *TO BE MODIFIED*
+## TO BE MODIFIED
+<hr>
 
 # A naive introduction to CQRS in C#
 
