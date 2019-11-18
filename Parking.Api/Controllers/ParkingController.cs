@@ -19,13 +19,15 @@ namespace Parking.Api.Controllers
         private readonly AuthenticationService _authenticationService;
         private readonly CommandStoreService _commandStoreService;
         private readonly ParkingQueryHandler _queryHandler;
+        private readonly CommandRouter _commandRouter;
 
-        public ParkingController(DbContext dbContext, AuthenticationService authenticationService, CommandStoreService commandStoreService, ParkingQueryHandler queryHandler)
+        public ParkingController(DbContext dbContext, AuthenticationService authenticationService, CommandStoreService commandStoreService, ParkingQueryHandler queryHandler, CommandRouter commandRouter)
         {
             _dbContext = dbContext;
             _authenticationService = authenticationService;
             _commandStoreService = commandStoreService;
             _queryHandler = queryHandler;
+            _commandRouter = commandRouter;
         }
 
         [HttpGet("availablePlaces/count")]
@@ -65,17 +67,13 @@ namespace Parking.Api.Controllers
         {
             var command = new CreateParkingCommand(request.ParkingName, request.Capacity);
 
-            var commandHandler = new CreateParkingCommandHandler(_dbContext, _commandStoreService);
-            commandHandler.Handle(command);
+            _commandRouter.Handle(command);
         }
 
         [HttpPost("{parkingName}/open")]
         public void OpenParking(string parkingName)
         {
-            var command = new OpenParkingCommand(parkingName);
-
-            var commandHandler = new OpenParkingCommandHandler( _dbContext,_commandStoreService);
-            commandHandler.Handle(command);
+            _commandRouter.Handle(new OpenParkingCommand(parkingName));
         }
 
         [HttpPost("{parkingName}/close")]

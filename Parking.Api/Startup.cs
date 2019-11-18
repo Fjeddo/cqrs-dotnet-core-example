@@ -6,7 +6,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Parking.Api.Commands.Handlers;
 using Parking.Api.Models;
 using Parking.Api.Queries.Handlers;
 using Parking.Api.Services;
@@ -40,10 +39,11 @@ namespace Parking.Api
 
             services.AddScoped<AuthenticationService>();
 
-            services.AddScoped<ParkingCommandHandler>();
             services.AddScoped<ParkingQueryHandler>();
 
             services.AddScoped<CommandStoreService>();
+
+            services.AddCommandHandlers();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
