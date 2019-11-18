@@ -15,10 +15,13 @@ namespace Parking.Api.Controllers
     [ApiController]
     public class ParkingController : ControllerBase
     {
-        private readonly DbContext _dbContext;
+        // Take command and query routing al the way to remove this dependency
+        private readonly DbContext _dbContext; 
         private readonly AuthenticationService _authenticationService;
         private readonly CommandStoreService _commandStoreService;
         private readonly ParkingQueryHandler _queryHandler;
+        /////
+
         private readonly CommandRouter _commandRouter;
 
         public ParkingController(DbContext dbContext, AuthenticationService authenticationService, CommandStoreService commandStoreService, ParkingQueryHandler queryHandler, CommandRouter commandRouter)

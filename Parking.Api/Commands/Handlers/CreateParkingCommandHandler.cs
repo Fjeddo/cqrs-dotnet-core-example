@@ -35,6 +35,8 @@ namespace Parking.Api.Commands.Handlers
 
             _dbContext.Add(parking);
             _dbContext.SaveChanges();
+
+            // Taking command handling all the way will remove the dependency to the command store service
             _commandStoreService.Push(command);
         }
     }

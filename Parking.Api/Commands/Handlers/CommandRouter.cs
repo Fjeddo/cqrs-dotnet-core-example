@@ -18,7 +18,7 @@ namespace Parking.Api.Commands.Handlers
             _serviceProvider = serviceProvider;
         }
         
-        public static void RegisterHandlers(IServiceCollection serviceCollection)
+        public static void RegisterHandlers(IServiceCollection serviceCollection /*, CommandStoreService commandStoreService*/)
         {
             serviceCollection.AddSingleton<CommandRouter>();
 
@@ -43,6 +43,9 @@ namespace Parking.Api.Commands.Handlers
             }
 
             handler.Handle(command);
+
+            // Here we could go for the command store service push
+            //_commandStoreService.Push(command);
         }
 
         private static void RegisterHandler(Type commandType, Type handlerType)
